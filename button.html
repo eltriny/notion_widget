@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather</title>
+
+    <style>
+        body{
+            background: none;
+        }
+      
+        .button-13 {
+              background-color: #fff;
+            border: 1px solid #d5d9d9;
+            border-radius: 8px;
+            box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+            box-sizing: border-box;
+            color: #0f1111;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Amazon Ember",sans-serif;
+            font-size: 13px;
+            line-height: 29px;
+            padding: 0 10px 0 11px;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: middle;
+            width: 100px;
+        }
+        .button-13:hover {
+            background-color: #f7fafa;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-wrapper" data-tippy-content="Click to copy button 13">
+          <button class="button-13" role="button">Button 13</button>
+    </div>
+</body>
+<script>
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+  
+    const button = document.querySelector('button');
+    button.innerHTML = params.text;
+    button.addEventListener("click", (event) => {
+      window.open(params.link, '_blank');
+    });
+    
+</script>
+</html>
