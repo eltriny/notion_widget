@@ -33,6 +33,7 @@
             touch-action: manipulation;
             vertical-align: middle;
             width: 100%;
+		    margin-bottom: 5px;
         }
         .button-13:hover {
             background-color: #f7fafa;
@@ -51,6 +52,7 @@
     
     dataList.forEach(item => {        
         const createButton = document.createElement('button');
+		createButton.className = 'button-13';
         createButton.innerHTML = item.text;
         createButton.dataset.link = item.link;
         createButton.addEventListener("click", (event) => {
