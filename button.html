@@ -40,19 +40,32 @@
     </style>
 </head>
 <body>
-    <div class="button-wrapper" data-tippy-content="Click to copy button 13">
-          <button class="button-13" role="button">Button 13</button>
-    </div>
+  <button class="button-13" role="button">Button 13</button>
 </body>
 <script>
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
-  
+
+    const body = document.querySelector('body');
+    const dataList = JSON.parse(params.data);
+    
+    dataList.forEach(item => {        
+        const createButton = document.createElement('button');
+        createButton.innerHTML = item.text;
+        createButton.dataset.link = item.link;
+        createButton.addEventListener("click", (event) => {
+          window.open(item.link, '_blank');
+        });
+        body.append(createButton);
+    });
+    
+/*    
     const button = document.querySelector('button');
     button.innerHTML = params.text;
     button.addEventListener("click", (event) => {
       window.open(params.link, '_blank');
     });
+*/    
     
 </script>
 </html>
