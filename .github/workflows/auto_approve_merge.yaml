@@ -27,8 +27,6 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const { context } = require('@actions/github');
-
             // 조건 검사 예: 라벨이 있거나 특정 사용자의 리뷰가 있는 경우
             if (context.payload.pull_request.labels.some(label => label.name === 'auto-merge')) {
               // Pull Request가 리뷰되었는지 확인
