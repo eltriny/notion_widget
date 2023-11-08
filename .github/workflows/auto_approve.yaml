@@ -18,7 +18,8 @@ jobs:
             const hasLabel = labelArray.includes('auto-merge');
             return hasLabel;    
       - name: Auto approve
-        uses: hmarr/auto-approve-action@v2
+        uses: hmarr/auto-approve-action@v3
         if: steps.label-check.outputs.result
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          review-message: "Auto approved automated PR"
