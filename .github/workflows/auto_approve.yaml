@@ -23,3 +23,30 @@ jobs:
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
           review-message: "Auto approved automated PR"
+      - name: Merge Pull Requests
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { context } = require('@actions/github');
+
+            // 조건 검사 예: 라벨이 있거나 특정 사용자의 리뷰가 있는 경우
+            if (context.payload.pull_request.labels.some(label => label.name === 'auto-merge')) {
+              // Pull Request가 리뷰되었는지 확인
+              const reviews = await github.pulls.listReviews({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number
+              });
+
+              const approvedReviews = reviews.data.filter(review => review.state === 'APPROVED');
+              if (approvedReviews.length > 0) {
+                // Pull Request를 merge
+                await github.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                  merge_method: 'squash' // merge 방식 선택: merge, squash, rebase
+                });
+              }
+            }
+          github-token: ${{ secrets.GITHUB_TOKEN }}          
