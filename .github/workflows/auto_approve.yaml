@@ -21,5 +21,5 @@ jobs:
         uses: hmarr/auto-approve-action@v3
         if: steps.label-check.outputs.result
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.BOT_TOKEN }}
           review-message: "Auto approved automated PR"
