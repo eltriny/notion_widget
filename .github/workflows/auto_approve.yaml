@@ -1,0 +1,22 @@
+name: Auto Approve
+
+on: [pull_request]
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for a label
+        uses: actions/github-script@v3
+        id: label-check
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels;
+            const labelArray = labels.map(label => label.name);
+            const hasLabel = labelArray.includes('auto-merge');
+            return hasLabel;    
+      - name: Auto approve
+        uses: hmarr/auto-approve-action@v2
+        if: steps.label-check.outputs.result
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
