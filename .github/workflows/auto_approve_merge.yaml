@@ -47,4 +47,4 @@ jobs:
                 });
               }
             }
-          github-token: ${{ secrets.GITHUB_TOKEN }}          
+          github-token: ${{ secrets.BOT_TOKEN }}          
