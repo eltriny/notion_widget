@@ -23,4 +23,4 @@ jobs:
 
             console.log(selectedReviewers);
 
-            console.log(github.rest.pulls);
+            console.log(github.pulls.createReview);
