@@ -9,23 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Assign two random reviewers
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           script: |
-            // 예시: 가능한 리뷰어 목록
-            const possibleReviewers = ['eltriny-bot', 'ispiny-dev'];
-
-            // 무작위로 2명 선택
-            const shuffled = possibleReviewers.sort(() => 0.5 - Math.random());
-            let selectedReviewers = shuffled.slice(0, 1);
-
-            // 리뷰어 할당
-            const prNumber = context.issue.number;
-            const repo = context.repo.repo;
-            const owner = context.repo.owner;
-            await github.rest.pulls.requestReviewers({
-              owner,
-              repo,
-              pull_number: prNumber,
-              reviewers: selectedReviewers
-            });
+            const creator = context.payload.sender.login;
+            console.log(creator);
+            console.log(context);
