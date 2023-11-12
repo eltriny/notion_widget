@@ -7,9 +7,21 @@ on:
 jobs:
   assign-reviewers:
     runs-on: ubuntu-latest
-    steps:
+    permissions:
+      pull-requests: write    
+    steps:    
+      - name: Check for a label
+        uses: actions/github-script@v6
+        id: label-check
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels;
+            const labelArray = labels.map(label => label.name);
+            const hasLabel = labelArray.includes('auto-merge');
+            return hasLabel;
       - name: Assign two random reviewers
         uses: actions/github-script@v6
+        if: steps.label-check.outputs.result
         id: get-reviewer
         with:
           script: |
@@ -25,7 +37,7 @@ jobs:
             console.log(selectedReviewers.map(reviewer => reviewer.login).join(','));
             return selectedReviewers.map(reviewer => reviewer.login).join(',');
       - name: Do something if eltriny-bot exists
-        if: contains(steps.get-reviewer.outputs.result, 'eltriny-bot')
+        if: steps.label-check.outputs.result && contains(steps.get-reviewer.outputs.result, 'eltriny-bot')
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
@@ -39,14 +51,39 @@ jobs:
               "body": "Auto Reviews"
             });
       - name: Do something if eltriny-bot exists
-        if: contains(steps.get-reviewer.outputs.result, 'eltriny')
+        if: steps.label-check.outputs.result && contains(steps.get-reviewer.outputs.result, 'eltriny')
         uses: actions/github-script@v6
         with:
           script: |
             console.info('eltriny step');
       - name: Do something if ispiniy exists
-        if: contains(steps.get-reviewer.outputs.result, 'ispiniy-dev')
+        if: steps.label-check.outputs.result && contains(steps.get-reviewer.outputs.result, 'ispiniy-dev')
         uses: actions/github-script@v6
         with:
           script: |
             console.info('ispiniy-dev step');            
+      - name: Merge Pull Requests
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // 조건 검사 예: 라벨이 있거나 특정 사용자의 리뷰가 있는 경우
+            if (context.payload.pull_request.labels.some(label => label.name === 'auto-merge')) {
+              // Pull Request가 리뷰되었는지 확인
+              const reviews = await github.pulls.listReviews({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number
+              });
+
+              const approvedReviews = reviews.data.filter(review => review.state === 'APPROVED');
+              if (approvedReviews.length > 0) {
+                // Pull Request를 merge
+                await github.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                  merge_method: 'squash' // merge 방식 선택: merge, squash, rebase
+                });
+              }
+            }
+          github-token: ${{ secrets.BOT_TOKEN }}
