@@ -22,3 +22,5 @@ jobs:
             let selectedReviewers = shuffled.slice(0, 2);         
 
             console.log(selectedReviewers);
+
+            console.log(github.rest.pulls);
