@@ -1,11 +1,8 @@
 name: Auto approve
 
-on:
-  workflow_dispatch:
-    inputs: 
-      pullRequestNumber:
-        description: Pull request number to auto-approve
-        required: false
+on: 
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
 
 jobs:
   assign-reviewers:
