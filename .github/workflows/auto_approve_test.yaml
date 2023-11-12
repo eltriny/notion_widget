@@ -13,5 +13,12 @@ jobs:
         with:
           script: |
             const creator = context.payload.sender.login;
+            const reviewers = context.payload.pull_request.requested_reviewers;
             console.log(creator);
             console.log(context);
+
+            // 무작위로 2명 선택
+            const shuffled = reviewers.sort(() => 0.5 - Math.random());
+            let selectedReviewers = shuffled.slice(0, 2);         
+
+            console.log(selectedReviewers);
