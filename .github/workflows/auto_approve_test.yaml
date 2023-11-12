@@ -4,19 +4,16 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, labeled]
 
-env:
-  ELTRINY_BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-
 jobs:
   assign-reviewers:
     runs-on: ubuntu-latest
     steps:
       - name: Assign two random reviewers
         uses: actions/github-script@v6
+        id: get-reviewer
         with:
           script: |
             const creator = context.payload.sender.login;
-            const prNumber = context.payload.pull_request.number;
             const reviewers = context.payload.pull_request.requested_reviewers;
             // console.log(creator);
             // console.log(context);
@@ -26,12 +23,30 @@ jobs:
             let selectedReviewers = shuffled.slice(0, 2);         
 
             console.log(selectedReviewers.map(reviewer => reviewer.login).join(','));
-
-            //const response = await github.rest.pulls.createReview({
-            //  ...context.repo,
-            //  "pull_number": prNumber,
-            //  "event": "APPROVE",
-            //  "body": "Auto Reviews"
-            //});
-
-            //console.log(response.data);
+            return selectedReviewers.map(reviewer => reviewer.login).join(',');
+      - name: Do something if eltriny-bot exists
+        if: contains(steps.get-reviewer.outputs.result, 'eltriny-bot')
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.BOT_TOKEN }}
+          script: |
+            console.info('eltriny-bot step');
+            const prNumber = context.payload.pull_request.number;
+            await github.rest.pulls.createReview({
+              ...context.repo,
+              "pull_number": prNumber,
+              "event": "APPROVE",
+              "body": "Auto Reviews"
+            });
+      - name: Do something if eltriny-bot exists
+        if: contains(steps.get-reviewer.outputs.result, 'eltriny')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.info('eltriny step');
+      - name: Do something if ispiniy exists
+        if: contains(steps.get-reviewer.outputs.result, 'ispiniy-dev')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.info('ispiniy-dev step');            
