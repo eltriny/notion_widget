@@ -15,7 +15,6 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const github = require('@actions/github');
             const context = github.context;
 
             // 예시: 가능한 리뷰어 목록
