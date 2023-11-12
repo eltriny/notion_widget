@@ -25,16 +25,13 @@ jobs:
             const shuffled = reviewers.sort(() => 0.5 - Math.random());
             let selectedReviewers = shuffled.slice(0, 2);         
 
-            // console.log(selectedReviewers);
+            console.log(selectedReviewers);
 
-            // Octokit 클라이언트 사용
-            const octokit = github.getOctokit(process.env['ELTRINY_BOT_TOKEN'])
+            //const response = await github.rest.pulls.createReview({
+            //  ...context.repo,
+            //  "pull_number": prNumber,
+            //  "event": "APPROVE",
+            //  "body": "Auto Reviews"
+            //});
 
-            const response = await octokit.rest.pulls.createReview({
-              ...context.repo,
-              "pull_number": prNumber,
-              "event": "APPROVE",
-              "body": "Auto Reviews"
-            });
-
-            console.log(response.data);
+            //console.log(response.data);
