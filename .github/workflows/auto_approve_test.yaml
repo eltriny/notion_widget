@@ -16,7 +16,7 @@ jobs:
         with:
           script: |
             // 예시: 가능한 리뷰어 목록
-            const possibleReviewers = ['eltriny-bot', 'ispiny'];
+            const possibleReviewers = ['eltriny-bot', 'ispiny-dev'];
 
             // 무작위로 2명 선택
             const shuffled = possibleReviewers.sort(() => 0.5 - Math.random());
