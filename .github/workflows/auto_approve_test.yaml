@@ -25,7 +25,7 @@ jobs:
             const shuffled = reviewers.sort(() => 0.5 - Math.random());
             let selectedReviewers = shuffled.slice(0, 2);         
 
-            console.log(selectedReviewers);
+            console.log(selectedReviewers.map(reviewer => reviewer.login).join(','));
 
             //const response = await github.rest.pulls.createReview({
             //  ...context.repo,
